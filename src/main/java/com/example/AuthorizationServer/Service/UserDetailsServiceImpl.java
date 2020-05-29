@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import com.example.AuthorizationServer.Entity.MyUserDetails;
 import com.example.AuthorizationServer.Entity.User;
 import com.example.AuthorizationServer.Repo.UserRepository;
 

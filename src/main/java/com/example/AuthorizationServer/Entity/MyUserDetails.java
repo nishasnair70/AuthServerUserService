@@ -1,4 +1,4 @@
-package com.example.AuthorizationServer.Service;
+package com.example.AuthorizationServer.Entity;
 
 import java.util.*;
 
