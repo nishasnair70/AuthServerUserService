@@ -19,6 +19,17 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import com.example.AuthorizationServer.endpoints.SubjectAttributeUserTokenConverter;
 
+/**
+ * The class will create and return json web token when the client
+		  is properly authenticates.
+ */
+
+/**
+ * 
+ * Tell Spring to activate the authorization server.
+ *
+ */
+
 @EnableAuthorizationServer
 @Configuration
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter{
@@ -37,35 +48,55 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		this.keyPair = keyPair;
 		this.jwtEnabled = jwtEnabled;
 	}
-
+	/**
+	 * Function configure specifies what are the credentials that has to be given.
+	 * 
+	 * ||clients.inMemory() specifies that we are going to store the services in memory. 
+	 * ||withClient ("client")is the user with whom we will identify.
+	 * ||authorizedGrantTypes specify services that configure for the defined user.
+	 * ||scopes ("read", "write") is the scope of the service. 
+	 * ||secret(passwordEncoder (). encode ("password")) is the password of the client.
+	 */
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients)
 			throws Exception {
-		// @formatter:off
+		
+//		clients.inMemory()
+//			.withClient("reader")
+//				.authorizedGrantTypes("password")
+//				.secret("{noop}secret")
+//				.scopes("message:read")
+//				.accessTokenValiditySeconds(600_000_000)
+//				.and()
+//			.withClient("writer")
+//				.authorizedGrantTypes("password")
+//				.secret("{noop}secret")
+//				.scopes("message:write")
+//				.accessTokenValiditySeconds(600_000_000)
+//				.and()
+//			.withClient("noscopes")
+//				.authorizedGrantTypes("password")
+//				.secret("{noop}secret")
+//				.scopes("none")
+//				.accessTokenValiditySeconds(600_000_000);
+		
 		clients.inMemory()
-			.withClient("reader")
-				.authorizedGrantTypes("password")
-				.secret("{noop}secret")
-				.scopes("message:read")
-				.accessTokenValiditySeconds(600_000_000)
-				.and()
-			.withClient("writer")
-				.authorizedGrantTypes("password")
-				.secret("{noop}secret")
-				.scopes("message:write")
-				.accessTokenValiditySeconds(600_000_000)
-				.and()
-			.withClient("noscopes")
-				.authorizedGrantTypes("password")
-				.secret("{noop}secret")
-				.scopes("none")
-				.accessTokenValiditySeconds(600_000_000);
-		// @formatter:on
+		.withClient("client").
+		authorizedGrantTypes("password")
+		.secret("{noop}secret")
+		.scopes("message:read","message:write")
+		.accessTokenValiditySeconds(600_000_000);
+		
+		
 	}
 
+	/**
+	 * Function specifies which authentication controller and store of identifiers
+	 * should use the end points.
+	 */
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-		// @formatter:off
+		
 		endpoints
 			.authenticationManager(this.authenticationManager)
 			.tokenStore(tokenStore());
@@ -74,7 +105,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 			endpoints
 				.accessTokenConverter(accessTokenConverter());
 		}
-		// @formatter:on
+		
 	}
 
 	@Bean

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -52,18 +53,12 @@ public class UserConfig extends WebSecurityConfigurerAdapter{
 			.authorizeRequests()
 				.mvcMatchers("/.well-known/jwks.json").permitAll()
 				.anyRequest().authenticated()
+				.and().httpBasic()
 				.and()
-			.httpBasic()
-				.and()
-			.csrf().ignoringRequestMatchers(request -> "/introspect".equals(request.getRequestURI()));
+			.csrf().ignoringRequestMatchers(request -> "/introspect".equals(request.getRequestURI()))
+			;
 	}
 
-	/*
-	 * @Bean
-	 * 
-	 * @Override public UserDetailsService userDetailsService() { return new
-	 * InMemoryUserDetailsManager( User.withDefaultPasswordEncoder()
-	 * .username("subject") .password("password") .roles("USER") .build()); }
-	 */
+	
 
 }
