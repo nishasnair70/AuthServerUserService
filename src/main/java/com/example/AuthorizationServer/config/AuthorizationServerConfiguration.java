@@ -2,20 +2,26 @@ package com.example.AuthorizationServer.config;
 
 import java.security.KeyPair;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.example.AuthorizationServer.endpoints.SubjectAttributeUserTokenConverter;
 
@@ -34,7 +40,9 @@ import com.example.AuthorizationServer.endpoints.SubjectAttributeUserTokenConver
 @Configuration
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter{
 
-	
+	@Autowired
+	BCryptPasswordEncoder encoder;
+
 	AuthenticationManager authenticationManager;
 	KeyPair keyPair;
 	boolean jwtEnabled;
@@ -83,12 +91,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		clients.inMemory()
 		.withClient("client").
 		authorizedGrantTypes("password")
-		.secret("{noop}secret")
+		.secret(encoder.encode("secret"))
+		//.secret("{noop}secret")
 		.scopes("message:read","message:write")
 		.accessTokenValiditySeconds(600_000_000);
 		
 		
 	}
+	
+	
 
 	/**
 	 * Function specifies which authentication controller and store of identifiers
