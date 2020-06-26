@@ -9,9 +9,10 @@ import javax.persistence.*;
 public class User {
  
     @Id
-    @Column(name = "user_id")
+//    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
  
     private String username;
     private String password;
@@ -25,11 +26,11 @@ public class User {
             )
     private Set<Role> roles = new HashSet<>();
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
