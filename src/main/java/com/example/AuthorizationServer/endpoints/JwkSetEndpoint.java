@@ -6,6 +6,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
 import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,6 +17,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 
 
 @FrameworkEndpoint
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JwkSetEndpoint {
 	
 	
